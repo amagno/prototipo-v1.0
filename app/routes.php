@@ -15,3 +15,19 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+Route::get('/login', function(){
+    return View::make('login.main');
+});
+
+Route::get('/create', function(){
+    return View::make('users.create');
+});
+
+Route::post('/send', function(){
+
+
+
+    return Response::json(Input::all());
+
+});

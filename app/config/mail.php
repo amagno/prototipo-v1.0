@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'driver' => 'smtp',
+	'driver' => 'mail',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from' => array('address' => 'teste@teste.com', 'name' => 'Alexandre Prototipo Teste'),
+	'from' => array('address' => 'a.mmagno@yhaoo.com.br', 'name' => 'Alexandre Prototipo'),
 
 	/*
 	|--------------------------------------------------------------------------

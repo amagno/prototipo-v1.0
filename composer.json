@@ -6,8 +6,7 @@
 	"require": {
 		"laravel/framework": "4.2.*",
         "laravelbook/ardent": "dev-master",
-        "zizaco/confide": "3.2.x",
-        "zizaco/entrust": "dev-master"
+        "cartalyst/sentry": "2.1.*"
 	},
     "require-dev": {
         "way/generators": "2.*",

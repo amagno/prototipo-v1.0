@@ -125,9 +125,8 @@ return array(
          *
          */
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
-        'Zizaco\Confide\ConfideServiceProvider',
-        'Zizaco\Entrust\EntrustServiceProvider',
-        'Way\Generators\GeneratorsServiceProvider'
+        'Way\Generators\GeneratorsServiceProvider',
+        'Cartalyst\Sentry\SentryServiceProvider',
 
 	),
 
@@ -195,8 +194,7 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-        'Confide'         => 'Zizaco\Confide\ConfideFacade',
-        'Entrust'         => 'Zizaco\Entrust\EntrustFacade',
+        'Sentry' => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
 
 	),
 

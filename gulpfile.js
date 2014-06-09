@@ -16,3 +16,8 @@ gulp.task('copy', function(){
         .pipe(gulp.dest('./app/views/headers/'));
 });
 
+gulp.task('angular', function(){
+    gulp.src('./app/views/headers/angular.blade.php')
+        .pipe(inject(gulp.src('./public/angular_modules/**/*.js'), {ignorePath: '/public/'}))
+        .pipe(gulp.dest('./app/views/headers/'));
+});

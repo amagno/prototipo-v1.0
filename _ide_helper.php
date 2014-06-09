@@ -13083,302 +13083,505 @@ namespace {
 		 }
 
 	}
-	class Confide extends \Zizaco\Confide\ConfideFacade{
+	class Sentry extends \Cartalyst\Sentry\Facades\Laravel\Sentry{
 		/**
-		 * Create a new confide instance.
+		 * Create a new Sentry object.
 		 *
-		 * @param ConfideRepository $repo A "repository" to abstract all the database interaction.
+		 * @param \Cartalyst\Sentry\Users\ProviderInterface $userProvider
+		 * @param \Cartalyst\Sentry\Groups\ProviderInterface $groupProvider
+		 * @param \Cartalyst\Sentry\Throttling\ProviderInterface $throttleProvider
+		 * @param \Cartalyst\Sentry\Sessions\SessionInterface $session
+		 * @param \Cartalyst\Sentry\Cookies\CookieInterface $cookie
+		 * @param string $ipAddress
 		 * @return void
 		 * @static 
 		 */
-		 public static function __construct($repo){
-			//Method inherited from \Zizaco\Confide\Confide
-			 \Zizaco\Confide\Confide::__construct($repo);
+		 public static function __construct($userProvider = null, $groupProvider = null, $throttleProvider = null, $session = null, $cookie = null, $ipAddress = null){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::__construct($userProvider, $groupProvider, $throttleProvider, $session, $cookie, $ipAddress);
 		 }
 
 		/**
-		 * Returns the Laravel application
+		 * Registers a user by giving the required credentials
+		 * and an optional flag for whether to activate the user.
 		 *
-		 * @return Illuminate\Foundation\Application
+		 * @param array  $credentials
+		 * @param bool   $activate
+		 * @return \Cartalyst\Sentry\Users\UserInterface
 		 * @static 
 		 */
-		 public static function app(){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::app();
+		 public static function register($credentials, $activate = false){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::register($credentials, $activate);
 		 }
 
 		/**
-		 * Returns an object of the model set in auth config
+		 * Attempts to authenticate the given user
+		 * according to the passed credentials.
 		 *
-		 * @return object
+		 * @param array  $credentials
+		 * @param bool   $remember
+		 * @return \Cartalyst\Sentry\Users\UserInterface
+		 * @throws \Cartalyst\Sentry\Throttling\UserBannedException
+		 * @throws \Cartalyst\Sentry\Throttling\UserSuspendedException
+		 * @throws \Cartalyst\Sentry\Users\LoginRequiredException
+		 * @throws \Cartalyst\Sentry\Users\PasswordRequiredException
+		 * @throws \Cartalyst\Sentry\Users\UserNotFoundException
 		 * @static 
 		 */
-		 public static function model(){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::model();
+		 public static function authenticate($credentials, $remember = false){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::authenticate($credentials, $remember);
 		 }
 
 		/**
-		 * Get the currently authenticated user or null.
+		 * Alias for authenticating with the remember flag checked.
 		 *
-		 * @return Zizaco\Confide\ConfideUser|null
+		 * @param array  $credentials
+		 * @return \Cartalyst\Sentry\Users\UserInterface
 		 * @static 
 		 */
-		 public static function user(){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::user();
+		 public static function authenticateAndRemember($credentials){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::authenticateAndRemember($credentials);
 		 }
 
 		/**
-		 * Set the user confirmation to true.
+		 * Check to see if the user is logged in and activated, and hasn't been banned or suspended.
 		 *
-		 * @param string $code
 		 * @return bool
 		 * @static 
 		 */
-		 public static function confirm($code){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::confirm($code);
+		 public static function check(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::check();
 		 }
 
 		/**
-		 * Attempt to log a user into the application with
-		 * password and identity field(s), usually email or username.
+		 * Logs in the given user and sets properties
+		 * in the session.
 		 *
-		 * @param array $credentials
-		 * @param bool $confirmed_only
-		 * @param mixed $identity_columns
-		 * @return boolean Success
+		 * @param \Cartalyst\Sentry\Users\UserInterface  $user
+		 * @param bool  $remember
+		 * @return void
+		 * @throws \Cartalyst\Sentry\Users\UserNotActivatedException
 		 * @static 
 		 */
-		 public static function logAttempt($credentials, $confirmed_only = false, $identity_columns = array()){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::logAttempt($credentials, $confirmed_only, $identity_columns);
+		 public static function login($user, $remember = false){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::login($user, $remember);
 		 }
 
 		/**
-		 * Checks if the credentials has been throttled by too
-		 * much failed login attempts
+		 * Alias for logging in and remembering.
 		 *
-		 * @param array $credentials
-		 * @return mixed Value.
+		 * @param \Cartalyst\Sentry\Users\UserInterface  $user
 		 * @static 
 		 */
-		 public static function isThrottled($credentials){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::isThrottled($credentials);
+		 public static function loginAndRemember($user){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::loginAndRemember($user);
 		 }
 
 		/**
-		 * Send email with information about password reset
-		 *
-		 * @param string  $email
-		 * @return bool
-		 * @static 
-		 */
-		 public static function forgotPassword($email){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::forgotPassword($email);
-		 }
-
-		/**
-		 * Checks to see if the user has a valid token.
-		 *
-		 * @param $token
-		 * @return bool
-		 * @static 
-		 */
-		 public static function isValidToken($token){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::isValidToken($token);
-		 }
-
-		/**
-		 * Change user password
-		 *
-		 * @return string
-		 * @static 
-		 */
-		 public static function resetPassword($params){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::resetPassword($params);
-		 }
-
-		/**
-		 * Log the user out of the application.
+		 * Logs the current user out.
 		 *
 		 * @return void
 		 * @static 
 		 */
 		 public static function logout(){
-			//Method inherited from \Zizaco\Confide\Confide
-			 \Zizaco\Confide\Confide::logout();
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::logout();
 		 }
 
 		/**
-		 * Display the default login view
+		 * Sets the user to be used by Sentry.
 		 *
-		 * @deprecated 
-		 * @return Illuminate\View\View
+		 * @param \Cartalyst\Sentry\Users\UserInterface
+		 * @return void
 		 * @static 
 		 */
-		 public static function makeLoginForm(){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::makeLoginForm();
+		 public static function setUser($user){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::setUser($user);
 		 }
 
 		/**
-		 * Display the default signup view
+		 * Returns the current user being used by Sentry, if any.
 		 *
-		 * @deprecated 
-		 * @return Illuminate\View\View
+		 * @return \Cartalyst\Sentry\Users\UserInterface
 		 * @static 
 		 */
-		 public static function makeSignupForm(){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::makeSignupForm();
+		 public static function getUser(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::getUser();
 		 }
 
 		/**
-		 * Display the forget password view
+		 * Sets the session driver for Sentry.
 		 *
-		 * @deprecated 
-		 * @return Illuminate\View\View
+		 * @param \Cartalyst\Sentry\Sessions\SessionInterface  $session
+		 * @return void
 		 * @static 
 		 */
-		 public static function makeForgotPasswordForm(){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::makeForgotPasswordForm();
+		 public static function setSession($session){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::setSession($session);
 		 }
 
 		/**
-		 * Display the forget password view
+		 * Gets the session driver for Sentry.
 		 *
-		 * @deprecated 
-		 * @return Illuminate\View\View
+		 * @return \Cartalyst\Sentry\Sessions\SessionInterface
 		 * @static 
 		 */
-		 public static function makeResetPasswordForm($token){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::makeResetPasswordForm($token);
+		 public static function getSession(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::getSession();
 		 }
 
 		/**
-		 * Check whether the controller's action exists.
-		 * 
-		 * Returns the url if it does. Otherwise false.
+		 * Sets the cookie driver for Sentry.
 		 *
-		 * @param $controllerAction
+		 * @param \Cartalyst\Sentry\Cookies\CookieInterface  $cookie
+		 * @return void
+		 * @static 
+		 */
+		 public static function setCookie($cookie){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::setCookie($cookie);
+		 }
+
+		/**
+		 * Gets the cookie driver for Sentry.
+		 *
+		 * @return \Cartalyst\Sentry\Cookies\CookieInterface
+		 * @static 
+		 */
+		 public static function getCookie(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::getCookie();
+		 }
+
+		/**
+		 * Sets the group provider for Sentry.
+		 *
+		 * @param \Cartalyst\Sentry\Groups\ProviderInterface
+		 * @return void
+		 * @static 
+		 */
+		 public static function setGroupProvider($groupProvider){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::setGroupProvider($groupProvider);
+		 }
+
+		/**
+		 * Gets the group provider for Sentry.
+		 *
+		 * @return \Cartalyst\Sentry\Groups\ProviderInterface
+		 * @static 
+		 */
+		 public static function getGroupProvider(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::getGroupProvider();
+		 }
+
+		/**
+		 * Sets the user provider for Sentry.
+		 *
+		 * @param \Cartalyst\Sentry\Users\ProviderInterface
+		 * @return void
+		 * @static 
+		 */
+		 public static function setUserProvider($userProvider){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::setUserProvider($userProvider);
+		 }
+
+		/**
+		 * Gets the user provider for Sentry.
+		 *
+		 * @return \Cartalyst\Sentry\Users\ProviderInterface
+		 * @static 
+		 */
+		 public static function getUserProvider(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::getUserProvider();
+		 }
+
+		/**
+		 * Sets the throttle provider for Sentry.
+		 *
+		 * @param \Cartalyst\Sentry\Throttling\ProviderInterface
+		 * @return void
+		 * @static 
+		 */
+		 public static function setThrottleProvider($throttleProvider){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::setThrottleProvider($throttleProvider);
+		 }
+
+		/**
+		 * Gets the throttle provider for Sentry.
+		 *
+		 * @return \Cartalyst\Sentry\Throttling\ProviderInterface
+		 * @static 
+		 */
+		 public static function getThrottleProvider(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::getThrottleProvider();
+		 }
+
+		/**
+		 * Sets the IP address Sentry is bound to.
+		 *
+		 * @param string  $ipAddress
+		 * @return void
+		 * @static 
+		 */
+		 public static function setIpAddress($ipAddress){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			 \Cartalyst\Sentry\Sentry::setIpAddress($ipAddress);
+		 }
+
+		/**
+		 * Gets the IP address Sentry is bound to.
+		 *
 		 * @return string
 		 * @static 
 		 */
-		 public static function checkAction($action, $parameters = array(), $absolute = true){
-			//Method inherited from \Zizaco\Confide\Confide
-			return \Zizaco\Confide\Confide::checkAction($action, $parameters, $absolute);
-		 }
-
-	}
-	class Entrust extends \Zizaco\Entrust\EntrustFacade{
-		/**
-		 * Create a new confide instance.
-		 *
-		 * @param Illuminate\Foundation\Application  $app
-		 * @return void
-		 * @static 
-		 */
-		 public static function __construct($app){
-			//Method inherited from \Zizaco\Entrust\Entrust
-			 \Zizaco\Entrust\Entrust::__construct($app);
+		 public static function getIpAddress(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::getIpAddress();
 		 }
 
 		/**
-		 * Checks if the current user has a Role by its name
+		 * Find the group by ID.
 		 *
-		 * @param string $name Role name.
-		 * @access public
-		 * @return boolean
+		 * @param int  $id
+		 * @return \Cartalyst\Sentry\Groups\GroupInterface  $group
+		 * @throws \Cartalyst\Sentry\Groups\GroupNotFoundException
 		 * @static 
 		 */
-		 public static function hasRole($permission){
-			//Method inherited from \Zizaco\Entrust\Entrust
-			return \Zizaco\Entrust\Entrust::hasRole($permission);
+		 public static function findGroupById($id){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findGroupById($id);
 		 }
 
 		/**
-		 * Check if the current user has a permission by its name
+		 * Find the group by name.
 		 *
-		 * @param string $permission Permission string.
-		 * @access public
-		 * @return boolean
+		 * @param string  $name
+		 * @return \Cartalyst\Sentry\Groups\GroupInterface  $group
+		 * @throws \Cartalyst\Sentry\Groups\GroupNotFoundException
 		 * @static 
 		 */
-		 public static function can($permission){
-			//Method inherited from \Zizaco\Entrust\Entrust
-			return \Zizaco\Entrust\Entrust::can($permission);
+		 public static function findGroupByName($name){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findGroupByName($name);
 		 }
 
 		/**
-		 * Get the currently authenticated user or null.
+		 * Returns all groups.
 		 *
-		 * @access public
-		 * @return Illuminate\Auth\UserInterface|null
+		 * @return array  $groups
 		 * @static 
 		 */
-		 public static function user(){
-			//Method inherited from \Zizaco\Entrust\Entrust
-			return \Zizaco\Entrust\Entrust::user();
+		 public static function findAllGroups(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findAllGroups();
 		 }
 
 		/**
-		 * Filters a route for the name Role. If the third parameter
-		 * is null then return 403. Overwise the $result is returned
+		 * Creates a group.
 		 *
-		 * @param string $route  Route pattern. i.e: "admin/*"
-		 * @param array|string $roles   The role(s) needed.
-		 * @param mixed $result i.e: Redirect::to('/')
-		 * @param bool $cumulative Must have all roles.
-		 * @access public
-		 * @return void
+		 * @param array  $attributes
+		 * @return \Cartalyst\Sentry\Groups\GroupInterface
 		 * @static 
 		 */
-		 public static function routeNeedsRole($route, $roles, $result = null, $cumulative = true){
-			//Method inherited from \Zizaco\Entrust\Entrust
-			 \Zizaco\Entrust\Entrust::routeNeedsRole($route, $roles, $result, $cumulative);
+		 public static function createGroup($attributes){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::createGroup($attributes);
 		 }
 
 		/**
-		 * Filters a route for the permission. If the third parameter
-		 * is null then return 403. Overwise the $result is returned
+		 * Finds a user by the given user ID.
 		 *
-		 * @param string $route  Route pattern. i.e: "admin/*"
-		 * @param array|string $permissions   The permission needed.
-		 * @param mixed  $result i.e: Redirect::to('/')
-		 * @param bool $cumulative Must have all permissions
-		 * @access public
-		 * @return void
+		 * @param mixed  $id
+		 * @return \Cartalyst\Sentry\Users\UserInterface
+		 * @throws \Cartalyst\Sentry\Users\UserNotFoundException
 		 * @static 
 		 */
-		 public static function routeNeedsPermission($route, $permissions, $result = null, $cumulative = true){
-			//Method inherited from \Zizaco\Entrust\Entrust
-			 \Zizaco\Entrust\Entrust::routeNeedsPermission($route, $permissions, $result, $cumulative);
+		 public static function findUserById($id){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findUserById($id);
 		 }
 
 		/**
-		 * Filters a route for the permission. If the third parameter
-		 * is null then return 403. Overwise the $result is returned
+		 * Finds a user by the login value.
 		 *
-		 * @param string $route  Route pattern. i.e: "admin/*"
-		 * @param array|string $roles   The role(s) needed.
-		 * @param array|string $permissions   The permission needed.
-		 * @param mixed  $result i.e: Redirect::to('/')
-		 * @param bool $cumulative Must have all permissions
-		 * @access public
-		 * @return void
+		 * @param string  $login
+		 * @return \Cartalyst\Sentry\Users\UserInterface
+		 * @throws \Cartalyst\Sentry\Users\UserNotFoundException
 		 * @static 
 		 */
-		 public static function routeNeedsRoleOrPermission($route, $roles, $permissions, $result = null, $cumulative = false){
-			//Method inherited from \Zizaco\Entrust\Entrust
-			 \Zizaco\Entrust\Entrust::routeNeedsRoleOrPermission($route, $roles, $permissions, $result, $cumulative);
+		 public static function findUserByLogin($login){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findUserByLogin($login);
+		 }
+
+		/**
+		 * Finds a user by the given credentials.
+		 *
+		 * @param array  $credentials
+		 * @return \Cartalyst\Sentry\Users\UserInterface
+		 * @throws \Cartalyst\Sentry\Users\UserNotFoundException
+		 * @static 
+		 */
+		 public static function findUserByCredentials($credentials){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findUserByCredentials($credentials);
+		 }
+
+		/**
+		 * Finds a user by the given activation code.
+		 *
+		 * @param string  $code
+		 * @return \Cartalyst\Sentry\Users\UserInterface
+		 * @throws \RuntimeException
+		 * @throws \Cartalyst\Sentry\Users\UserNotFoundException
+		 * @static 
+		 */
+		 public static function findUserByActivationCode($code){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findUserByActivationCode($code);
+		 }
+
+		/**
+		 * Finds a user by the given reset password code.
+		 *
+		 * @param string  $code
+		 * @return \Cartalyst\Sentry\Users\UserInterface
+		 * @throws \RuntimeException
+		 * @throws \Cartalyst\Sentry\Users\UserNotFoundException
+		 * @static 
+		 */
+		 public static function findUserByResetPasswordCode($code){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findUserByResetPasswordCode($code);
+		 }
+
+		/**
+		 * Returns an all users.
+		 *
+		 * @return array
+		 * @static 
+		 */
+		 public static function findAllUsers(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findAllUsers();
+		 }
+
+		/**
+		 * Returns all users who belong to
+		 * a group.
+		 *
+		 * @param \Cartalyst\Sentry\Groups\GroupInterface  $group
+		 * @return array
+		 * @static 
+		 */
+		 public static function findAllUsersInGroup($group){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findAllUsersInGroup($group);
+		 }
+
+		/**
+		 * Returns all users with access to
+		 * a permission(s).
+		 *
+		 * @param string|array  $permissions
+		 * @return array
+		 * @static 
+		 */
+		 public static function findAllUsersWithAccess($permissions){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findAllUsersWithAccess($permissions);
+		 }
+
+		/**
+		 * Returns all users with access to
+		 * any given permission(s).
+		 *
+		 * @param array  $permissions
+		 * @return array
+		 * @static 
+		 */
+		 public static function findAllUsersWithAnyAccess($permissions){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findAllUsersWithAnyAccess($permissions);
+		 }
+
+		/**
+		 * Creates a user.
+		 *
+		 * @param array  $credentials
+		 * @return \Cartalyst\Sentry\Users\UserInterface
+		 * @static 
+		 */
+		 public static function createUser($credentials){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::createUser($credentials);
+		 }
+
+		/**
+		 * Returns an empty user object.
+		 *
+		 * @return \Cartalyst\Sentry\Users\UserInterface
+		 * @static 
+		 */
+		 public static function getEmptyUser(){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::getEmptyUser();
+		 }
+
+		/**
+		 * Finds a throttler by the given user ID.
+		 *
+		 * @param mixed   $id
+		 * @param string  $ipAddress
+		 * @return \Cartalyst\Sentry\Throttling\ThrottleInterface
+		 * @static 
+		 */
+		 public static function findThrottlerByUserId($id, $ipAddress = null){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findThrottlerByUserId($id, $ipAddress);
+		 }
+
+		/**
+		 * Finds a throttling interface by the given user login.
+		 *
+		 * @param string  $login
+		 * @param string  $ipAddress
+		 * @return \Cartalyst\Sentry\Throttling\ThrottleInterface
+		 * @static 
+		 */
+		 public static function findThrottlerByUserLogin($login, $ipAddress = null){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::findThrottlerByUserLogin($login, $ipAddress);
+		 }
+
+		/**
+		 * Handle dynamic method calls into the method.
+		 *
+		 * @param string  $method
+		 * @param array   $parameters
+		 * @return mixed
+		 * @throws \BadMethodCallException
+		 * @static 
+		 */
+		 public static function __call($method, $parameters){
+			//Method inherited from \Cartalyst\Sentry\Sentry
+			return \Cartalyst\Sentry\Sentry::__call($method, $parameters);
 		 }
 
 	}
