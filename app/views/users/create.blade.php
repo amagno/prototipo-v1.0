@@ -11,6 +11,7 @@
                 <form id="formTest">
                     <input type="text" name="nome" ng-model="data.nome"/>
                     <input type="text" name="sobrenome" ng-model="data.sobrenome"/>
+                    <input type="text" name="idade" ng-model="data.idade"/>
 
                     <input type="submit" value="Enviar" ng-click="sendData('/send')"/>
                 </form>

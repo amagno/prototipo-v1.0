@@ -26,8 +26,6 @@ Route::get('/create', function(){
 
 Route::post('/send', function(){
 
-
-
     return Response::json(Input::all());
 
 });
